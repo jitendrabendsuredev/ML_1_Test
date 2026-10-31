@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ML Test – Statistics, Regression &amp; Metrics</title>
+<style>
+:root{--bg:#f7f7f5;--card:#fff;--tx:#1d1d1f;--mu:#666;--ac:#2563eb;--ok:#15803d;--bad:#b91c1c;--bd:#ddd;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16171a;--card:#202226;--tx:#eee;--mu:#9aa;--ac:#60a5fa;--ok:#4ade80;--bad:#f87171;--bd:#3a3d44;color-scheme:dark}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:820px;margin:0 auto;padding:16px}
+h1{font-size:1.4rem;margin:.2em 0}h2{font-size:1.15rem;margin:1.5em 0 .5em}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px;margin:12px 0}
+.mu{color:var(--mu);font-size:.9rem}
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px 14px;display:none;justify-content:space-between;font-weight:600}
+#timer.low{color:var(--bad)}
+label.o{display:block;padding:6px 8px;border-radius:6px;cursor:pointer}
+label.o:hover{background:var(--bg)}
+label.o.ok{background:rgba(21,128,61,.18)}label.o.no{background:rgba(185,28,28,.18)}
+button{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:10px 20px;font-size:1rem;cursor:pointer}
+input[type=text],textarea{width:100%;box-sizing:border-box;padding:8px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--tx);font:inherit}
+textarea{min-height:110px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem}
+#test{display:none}
+.chk{margin-top:8px}.msg{margin-top:8px;font-size:.9rem}.msg .p{color:var(--ok)}.msg .f{color:var(--bad)}
+.tag{font-size:.75rem;color:var(--ac);font-weight:600}
+</style></head><body><main>
+<h1>ML Test: Statistics, Regression &amp; Metrics</h1>
+<p class="mu">Topics: Basic Statistics · Simple &amp; Multiple Linear Regression · Hypothesis Testing · MAE, MSE, RMSE, R² score</p>
+<div id="start" class="card">
+<p><b>Format:</b> 60 MCQ (1 mark each) + 10 practical assignments (10 marks each) · <b>Time: 2 hours</b></p>
+<p class="mu">Timer Start button dabalyavar suru hoil. Time sampla ki test auto-submit hoil.</p>
+<input type="text" id="nm" placeholder="Student name / roll no."><br><br>
+<button onclick="begin()">Start Test</button>
+</div>
+<div id="bar"><span id="timer">02:00:00</span><span id="prog">0/60 answered</span></div>
+<div id="test">
+<h2>Section A – MCQ (60)</h2><div id="mcq"></div>
+<h2>Section B – Practical Assignments (10)</h2><div id="asg"></div>
+<button onclick="fin()">Submit Test</button>
+</div>
+<div id="res" class="card" style="display:none"></div>
+</main>
+<script>
+// format: question|correct|wrong1|wrong2|wrong3
+const Q=`Mean of 2, 4, 6, 8, 10 is|6|5|7|8
+Median of 3, 1, 7, 5, 9 is|5|3|7|9
+Mode of 2, 3, 3, 5, 7 is|3|2|5|7
+Which measure is robust to outliers?|Median|Mean|Range|Variance
+Variance is the average of|squared deviations from the mean|absolute deviations|raw values|ranks
+Standard deviation equals|square root of variance|variance squared|mean of variance|half the range
+Range of 4, 9, 15, 2 is|13|11|15|9
+Correlation coefficient r always lies between|−1 and +1|0 and 1|−∞ and +∞|0 and 100
+r = 0 means|no linear relationship|perfect relationship|causation|negative slope
+In a positively skewed distribution|mean &gt; median|mean &lt; median|mean = median|mode &gt; mean
+Positive covariance means|both variables tend to increase together|one rises, other falls|no relation|variance is zero
+z-score of x = 70 when mean = 60, SD = 5 is|2|10|0.5|−2
+In a normal distribution ≈ what % lies within 1 SD?|68%|50%|95%|99.7%
+Sample variance divides by|n − 1|n|n + 1|2n
+Which is a categorical variable?|Gender|Height|Salary|Temperature
+Simple linear regression equation is|y = b0 + b1x|y = b0 + b1x + b2x²|y = e^x|y = b0 / x
+Slope b1 represents|change in y per unit change in x|value of y when x = 0|error term|correlation
+OLS minimizes|sum of squared residuals|sum of residuals|max error|number of features
+Residual =|actual − predicted|predicted − actual|actual × predicted|actual / predicted
+If b0 = 2, b1 = 3, then ŷ at x = 4 is|14|12|10|24
+Slope b1 =|Cov(x, y) / Var(x)|Var(x) / Cov(x, y)|r × n|Σx / n
+The regression line always passes through|(x̄, ȳ)|(0, 0)|(max x, max y)|(median x, median y)
+Which is NOT an assumption of linear regression?|Features must be categorical|Linearity|Homoscedasticity|Independent errors
+Dependent variable is also called|target / response|predictor|feature|regressor
+If b1 is negative, then|y decreases as x increases|y increases as x increases|y is constant|model is invalid
+Multiple linear regression has|two or more independent variables|only one independent variable|no target|only categorical target
+Multicollinearity means|predictors are highly correlated|residuals are correlated|target has outliers|data is missing
+Which detects multicollinearity?|VIF|MAE|p-value of y|Chi-square
+Adjusted R² differs from R² by|penalizing useless predictors|ignoring predictors|using MAE|using test data only
+For a categorical feature with n categories, use|n − 1 dummy variables|n + 1 dummy variables|2n dummies|no dummies
+In MLR, coefficient b1 is the change in y per unit x1|holding other variables constant|ignoring other variables|when x1 = 0|always positive
+y = 5 + 2x1 + 3x2; x1 = 1, x2 = 2 gives ŷ =|13|11|10|16
+Which scales features to mean 0, SD 1?|StandardScaler|LabelEncoder|train_test_split|OneHotEncoder
+Overfitting means|good on train, poor on test|poor on train and test|good on test only|zero error everywhere
+Adding more features to OLS, training R²|never decreases|always decreases|always stays same|becomes negative
+Null hypothesis (H0) usually states|no effect or no difference|there is an effect|the sample is biased|p = 1 is impossible
+If p-value &lt; α (0.05), we|reject H0|accept H0|reject H1 only|collect no more data
+Type I error is|rejecting a true H0|accepting a false H0|rejecting a false H0|accepting a true H0
+Type II error is|failing to reject a false H0|rejecting a true H0|rejecting a false H0|a calculation error
+α (significance level) is|probability of Type I error|probability of Type II error|power of test|the p-value
+t-test is used to|compare means|test categorical association|compare 3+ variances only|find correlation only
+Chi-square test is used for|association between categorical variables|comparing two means|regression slope|normality of residuals
+ANOVA compares|means of 3 or more groups|two proportions|only medians|only variances of 2 groups
+Significance of an individual regression coefficient is tested by|t-test|F-test only|chi-square|z-score of y
+F-test in regression checks|overall model significance|each coefficient|residual mean|normality
+A 95% confidence interval means|95% of such intervals would contain the true parameter|95% of data lies inside it|p = 0.95|the sample mean is 95
+A two-tailed test checks|difference in either direction|only increase|only decrease|no difference ever
+p = 0.03 and α = 0.01 → decision is|fail to reject H0|reject H0|accept H1 for sure|invalid test
+MAE is|mean of abs(y − ŷ)|mean of (y − ŷ)²|√mean of (y − ŷ)²|1 − SSres/SStot
+MSE is|mean of (y − ŷ)²|mean of abs(y − ŷ)|sum of y|1 − R²
+RMSE is|√MSE|MSE²|MAE/2|MSE/n
+Which penalizes large errors more?|MSE|MAE|Both equally|None
+RMSE has the unit of|the target variable|target squared|no unit|the feature
+R² =|1 − SSres/SStot|SSres/SStot|SStot − SSres|√MSE
+R² = 1 indicates|perfect fit|no fit|worst model|constant model
+R² can be negative when|model is worse than predicting the mean|r = 0|n is small|there are no outliers
+Errors 2, −2, 4, −4 → MAE =|3|0|4|6
+Errors 2, −2, 4, −4 → MSE =|10|0|5|20
+SSres = 20, SStot = 100 → R² =|0.8|0.2|5|0.5
+Lower RMSE on test data means|better predictions|worse predictions|more overfitting|higher R² always is wrong`.split("\n");
+const A=[
+"Using NumPy, take data = [10, 20, 30, 40, 50]. Print the mean, median, variance and standard deviation. Add one more value, 500, to the list and print the mean and median again. Which one changed more?",
+"Create a pandas DataFrame with hours = [1,2,3,4,5] and marks = [35,45,50,60,70]. Print df.head(), df.describe() and df.corr(). Write one line: is the correlation positive or negative, strong or weak?",
+"Simple Linear Regression: use hours = [1,2,3,4,5] and marks = [35,45,50,60,70]. Fit LinearRegression from sklearn, print the slope and intercept, and predict marks for 6 hours.",
+"Using matplotlib, draw a scatter plot of the same hours vs marks data and add the regression line (use model.predict). Add a title and axis labels.",
+"Multiple Linear Regression: area = [1000,1500,2000,2500,3000], bedrooms = [1,2,3,3,4], price = [30,45,60,70,90] (in lakhs). Fit LinearRegression, print the coefficients and intercept, and predict the price for area = 1800 and bedrooms = 2.",
+"Take y_true = [3, 5, 7, 9] and y_pred = [2.5, 5.5, 6, 10]. Using sklearn.metrics, print MAE, MSE, RMSE (use np.sqrt) and R² score. Also calculate MAE by hand on paper and check it matches.",
+"Use train_test_split (test_size=0.2, random_state=42) on any small dataset of 10 rows (x and y). Print the shapes of X_train and X_test, fit LinearRegression on the train set and print the R² score on the test set.",
+"Hypothesis testing: sample = [52, 55, 49, 61, 58]. Test H0: mean = 50 using scipy.stats.ttest_1samp. Print the p-value and write: reject or fail to reject H0 at α = 0.05?",
+"Chi-square: use the table [[20, 30], [30, 20]] (rows = Male/Female, columns = Likes A/Likes B). Run scipy.stats.chi2_contingency, print the chi-square value and p-value, and write whether the two variables are associated (α = 0.05).",
+"In your own words (5 short lines), explain the outputs you got above: what the slope means, what the intercept means, what R² tells us, what a p-value tells us, and the difference between MAE and RMSE."
+];
+const S=[];
+const C=[
+{c:[["mean"],["median"],["var","variance"],["std","standard deviation"],["500","500 added to the list"]],o:[[[30],"mean and median = 30"],[[200,250],"variance = 200 (or 250)"],[[14.14,15.81],"std = 14.14 (or 15.81)"],[[108.33],"mean after adding 500 = 108.33"],[[35],"median after adding 500 = 35"]]},
+{c:[["DataFrame"],["head"],["describe"],["corr"]],o:[[[0.995],"correlation ≈ 0.995",0.006]]},
+{c:[["LinearRegression"],["fit"],["coef_","slope (coef_)"],["intercept_"],["predict"]],o:[[[8.5],"slope = 8.5",0.05],[[26.5],"intercept = 26.5",0.05],[[77.5],"prediction for 6 hours = 77.5",0.1]]},
+{c:[["scatter"],["plot\\(","regression line plotted"],["predict","predict used for the line"],["title"],["xlabel|ylabel","axis labels"]]},
+{c:[["LinearRegression"],["fit"],["coef_"],["predict"],["1800","area 1800 used for prediction"]],o:[[[2],"intercept = 2.0",0.05],[[0.022],"area coefficient = 0.022",0.001],[[5],"bedrooms coefficient = 5.0",0.05],[[51.6],"prediction = 51.6",0.1]]},
+{c:[["mean_absolute_error","MAE function"],["mean_squared_error","MSE function"],["sqrt","RMSE using sqrt"],["r2_score","R² score function"]],o:[[[0.75],"MAE = 0.75",0.01],[[0.625],"MSE = 0.625",0.01],[[0.79],"RMSE = 0.79",0.01],[[0.875],"R² = 0.875",0.01]]},
+{c:[["train_test_split"],["test_size"],["random_state"],["shape"],["LinearRegression|score|r2_score","model fit and R² score"]],o:[[[8],"X_train has 8 rows",0.01],[[2],"X_test has 2 rows",0.01]]},
+{c:[["ttest_1samp"],["0\\.05","α = 0.05 used"],["fail to reject|not reject","conclusion written: fail to reject H0 (p > 0.05)"]],o:[[[2.357],"t-statistic = 2.357",0.01],[[0.078],"p-value = 0.078",0.002]]},
+{c:[["chi2_contingency"],["associat|independent|reject","conclusion written (associated or not)"]],o:[[[3.24,4],"chi-square = 3.24 (or 4.0 with correction=False)",0.01],[[0.072,0.0455],"p-value = 0.072 (or 0.046)",0.002]]},
+{c:[["slope"],["intercept"],["r2|r²|r-squared|r squared","R²"],["p-value|p value","p-value"],["mae"],["rmse"]],len:150}
+];
+let M=[],end,tick,done=false;
+const $=i=>document.getElementById(i);
+function sh(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+// split carefully: question may contain '|' inside MAE option, so rebuild using last 4 fields
+function render(){
+ let h="";
+ Q.forEach((l,i)=>{
+  const p=l.split("|"),q=p[0],opts=p.slice(1);
+  M[i]={q,c:opts[0],o:sh(opts)};
+  h+=`<div class="card"><span class="tag">Q${i+1}</span><div>${q}</div>`+M[i].o.map((o,k)=>`<label class="o"><input type="radio" name="q${i}" value="${k}" onchange="cnt()"> ${o}</label>`).join("")+`</div>`;
+ });
+ $("mcq").innerHTML=h;
+ $("asg").innerHTML=A.map((a,i)=>`<div class="card"><span class="tag">Assignment ${i+1} (10 marks)</span><p>${a}</p><textarea placeholder="Write your Python code here…"></textarea><textarea style="min-height:70px;margin-top:8px" placeholder="Paste your output here…"></textarea><button class="chk" onclick="chk(${i})">Check &amp; Submit</button><div class="msg"></div></div>`).join("");
+}
+function chk(i){
+ const cd=$("asg").children[i],[code,out]=cd.querySelectorAll("textarea"),m=cd.querySelector(".msg"),k=C[i],all=code.value+"\n"+out.value;
+ if(code.value.trim().length<10){m.innerHTML='<div class="f">✗ Write your code first.</div>';return}
+ const nums=(out.value.match(/-?\d*\.?\d+(?:e-?\d+)?/gi)||[]).map(Number),r=[];
+ k.c.forEach(([x,l=x])=>r.push([new RegExp(x,"i").test(all),"Code: "+l]));
+ (k.o||[]).forEach(([v,l,t=.02])=>r.push([v.some(a=>nums.some(n=>Math.abs(n-a)<=t)),"Output: "+l]));
+ if(k.len)r.push([code.value.length>=k.len,"Write a longer explanation (at least "+k.len+" characters)"]);
+ const bad=r.filter(x=>!x[0]);
+ m.innerHTML=r.map(x=>`<div class="${x[0]?"p":"f"}">${x[0]?"✓":"✗"} ${x[1]}</div>`).join("")+(bad.length?`<div class="f"><b>Not submitted: ${bad.length} item(s) remaining. Fix them and click again.</b></div>`:'<div class="p"><b>✓ Submitted!</b></div>');
+ if(!bad.length){S[i]=1;code.readOnly=out.readOnly=true;cd.querySelector("button").disabled=true}
+}
+function cnt(){let n=0;for(let i=0;i<60;i++)if(document.querySelector(`input[name=q${i}]:checked`))n++;$("prog").textContent=n+"/60 answered"}
+function begin(){
+ if(!$("nm").value.trim()){$("nm").focus();return}
+ $("start").style.display="none";$("test").style.display="block";$("bar").style.display="flex";
+ render();end=Date.now()+7200000;tick=setInterval(tk,500);tk();
+}
+function tk(){
+ let s=Math.max(0,Math.round((end-Date.now())/1000));
+ const f=n=>String(n).padStart(2,"0");
+ $("timer").textContent=f(Math.floor(s/3600))+":"+f(Math.floor(s%3600/60))+":"+f(s%60);
+ if(s<600)$("timer").className="low";
+ if(s<=0)fin(true);
+}
+function fin(auto){
+ if(done)return;
+ if(!auto&&!confirm("Submit the test now?"))return;
+ done=true;clearInterval(tick);let sc=0;
+ M.forEach((m,i)=>{
+  const sel=document.querySelector(`input[name=q${i}]:checked`);
+  const labs=document.querySelectorAll(`input[name=q${i}]`);
+  labs.forEach((r,k)=>{r.disabled=true;const L=r.parentElement;if(m.o[k]===m.c)L.classList.add("ok");else if(sel&&+sel.value===k)L.classList.add("no")});
+  if(sel&&m.o[+sel.value]===m.c)sc++;
+ });
+ document.querySelectorAll("textarea").forEach(t=>t.readOnly=true);
+ document.querySelectorAll("#test button").forEach(b=>b.style.display="none");
+ const r=$("res");r.style.display="block";
+ r.innerHTML=`<h2 style="margin-top:0">Result – ${$("nm").value.replace(/</g,"&lt;")}</h2><p><b>MCQ score: ${sc} / 60</b> (${Math.round(sc/60*100)}%)</p><p><b>Assignments submitted: ${S.filter(Boolean).length} / 10</b></p><p class="mu">Correct answers are highlighted green, your wrong choices red. Assignments were auto-checked on code and output; the trainer reviews the submitted code.${auto?" Time was over, so the test was auto-submitted.":""}</p>`;
+ scrollTo({top:0,behavior:"smooth"});
+}
+</script></body></html>
